@@ -1,5 +1,5 @@
-// Inactivity watchdog: after `idleTimeoutSec` without a touch, ask "Still there?";
-// if nobody answers within `idleCountdownSec`, wipe the session and return to the splash.
+
+
 import { h } from './dom.js';
 import { config } from '../config.js';
 import { openOverlay } from '../ui/overlay.js';
@@ -36,7 +36,7 @@ function showPrompt() {
 }
 
 export const idle = {
-  /** @param {{ isIdleScreen: () => boolean, onTimeout: () => void }} opts */
+
   start(opts) {
     isIdleScreen = opts.isIdleScreen;
     onTimeout = opts.onTimeout;

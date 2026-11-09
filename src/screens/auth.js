@@ -1,21 +1,19 @@
-// Log In and Sign Up screens.
+
 import { h } from '../core/dom.js';
 import { router } from '../core/router.js';
-import { startMember, scanToSignIn } from '../core/session.js';
-import { formatMemberCode } from '../ui/memberQr.js';
+import { startGuest, startMember, scanToSignIn } from '../core/session.js';
 import { authService } from '../services/api.js';
 import { storage } from '../services/storage.js';
 import { icon, logo, backButton, checkbox, withBusy, formError } from '../ui/components.js';
 import { openKeypad } from '../ui/keypad.js';
 import { statusDialog, infoDialog } from '../ui/overlay.js';
-import { attachKeyboard } from '../ui/keyboard.js';
-import { config } from '../config.js';
+import { attachKeyboard, attachTextKeypad } from '../ui/keyboard.js';
 import { firstName } from '../core/format.js';
 
 const REMEMBER_KEY = 'isla.rememberedStudentId';
 const digits = (s) => s.replace(/\D/g, '');
 
-/** A field that opens the numeric keypad when tapped (Student ID / PIN). */
+
 function keypadField({ label, caps = false, placeholder, secret = false, allowDash = false, maxLength = 12, value = '' }) {
   let current = value;
   let revealed = false;
@@ -55,7 +53,7 @@ function keypadField({ label, caps = false, placeholder, secret = false, allowDa
   return api;
 }
 
-function textField({ label, placeholder, kind = 'text', autocomplete = 'off', maxLength = 80 }) {
+function textField({ label, placeholder, kind = 'text', autocomplete = 'off', maxLength = 80, modalKeyboard = false }) {
   const err = h('div', { class: 'field__error', 'aria-live': 'polite' });
   const input = h('input', {
     class: 'field__control', type: 'text', placeholder, autocomplete, maxlength: maxLength,
@@ -63,7 +61,8 @@ function textField({ label, placeholder, kind = 'text', autocomplete = 'off', ma
     inputmode: kind === 'email' ? 'email' : 'text', 'aria-label': label,
     onInput: () => api.setError(''),
   });
-  attachKeyboard(input, { kind });
+  if (modalKeyboard) attachTextKeypad(input, { label, kind });
+  else attachKeyboard(input, { kind });
   const el = h('label', { class: 'field' }, h('span', { class: 'field__label field__label--caps' }, label), h('div', { class: 'field__wrap' }, input), err);
   const api = {
     el, input,
@@ -73,7 +72,7 @@ function textField({ label, placeholder, kind = 'text', autocomplete = 'off', ma
   return api;
 }
 
-/* ---------------- LOG IN ---------------- */
+
 export function loginScreen({ prefillId } = {}) {
   const remembered = storage.get(REMEMBER_KEY, '');
   let remember = Boolean(remembered);
@@ -93,7 +92,7 @@ export function loginScreen({ prefillId } = {}) {
     try {
       const profile = await withBusy(submit, () => authService.login(id, pin), 'Logging in…');
       if (remember) storage.set(REMEMBER_KEY, idField.value); else storage.remove(REMEMBER_KEY);
-      // design frame "log in failed- modal" actually shows the success state
+
       await statusDialog({ title: 'Log in Successfully!', text: `Welcome back, ${firstName(profile.fullName)}!`, actionLabel: 'Continue', dismissible: false });
       startMember(profile);
     } catch (e) {
@@ -122,13 +121,12 @@ export function loginScreen({ prefillId } = {}) {
         ),
         errorBox,
         submit,
-        h('button', { class: 'btn btn--outline btn--md btn--block', type: 'button', onClick: () => scanToSignIn() }, icon('scanQr', 'btn__icon'), 'Scan QR instead'),
+        h('button', { class: 'btn btn--outline btn--md btn--block', type: 'button', onClick: () => scanToSignIn() }, icon('scanQr', 'btn__icon'), 'Scan kiosk QR with phone'),
         h('div', { class: 'divider-or' }, 'or'),
         h('div', { class: 'auth-card__split' },
           h('button', { class: 'btn btn--outline btn--md', type: 'button', onClick: () => router.go('signup') }, 'Create Account'),
-          h('button', { class: 'btn btn--guest btn--md', type: 'button', onClick: () => router.go('guest') }, 'Continue as Guest'),
+          h('button', { class: 'btn btn--guest btn--md', type: 'button', onClick: () => startGuest() }, 'Continue as Guest'),
         ),
-        config.showDemoHints && h('p', { class: 'demo-hint' }, 'Demo account — Student ID 7230509 · PIN 1234'),
       ),
       h('p', { class: 'footnote' }, 'Guests can browse and order, but won’t earn student points or rewards.'),
     ),
@@ -136,11 +134,11 @@ export function loginScreen({ prefillId } = {}) {
   return { el };
 }
 
-/* ---------------- SIGN UP ---------------- */
+
 export function signupScreen() {
-  const idField = keypadField({ label: 'Student ID', caps: true, placeholder: 'e.g. 7230509', allowDash: true, maxLength: 12 });
-  const nameField = textField({ label: 'Full Name', placeholder: 'Enter your full name', autocomplete: 'name' });
-  const emailField = textField({ label: 'Email Address', placeholder: 'Enter your email', kind: 'email', autocomplete: 'email' });
+  const idField = keypadField({ label: 'Student ID', caps: true, placeholder: 'Enter your Student ID', allowDash: true, maxLength: 12 });
+  const nameField = textField({ label: 'Full Name', placeholder: 'Enter your full name', autocomplete: 'name', modalKeyboard: true });
+  const emailField = textField({ label: 'Email Address', placeholder: 'Enter your email', kind: 'email', autocomplete: 'email', modalKeyboard: true });
   const pinField = keypadField({ label: 'Create PIN', caps: true, placeholder: '4-6 digit PIN', secret: true, maxLength: 6 });
   const pin2Field = keypadField({ label: 'Confirm PIN', caps: true, placeholder: '4-6 digit PIN', secret: true, maxLength: 6 });
   let agreed = false;
@@ -169,10 +167,11 @@ export function signupScreen() {
     if (bad) return;
     try {
       const profile = await withBusy(submit, () => authService.signup({ studentId: id, fullName: nameField.value, email: emailField.value, pin: pinField.value }), 'Creating…');
-      await statusDialog({ title: 'Account Created!', text: `Your Account has been successfully registered. Your member code is ${formatMemberCode(profile.memberCode)} — your QR is under My Rewards.`, actionLabel: 'Continue', dismissible: false });
+      await statusDialog({ title: 'Account Created!', text: 'Your account has been successfully registered. Sign in to view your points and rewards.', actionLabel: 'Continue', dismissible: false });
       router.go('login', { prefillId: idField.value }, { replace: true });
     } catch (e) {
       if (e.code === 'ID_EXISTS') idField.setError(e.message);
+      else if (e.code === 'EMAIL_EXISTS') emailField.setError(e.message);
       else errorBox.replaceChildren(formError('We couldn’t create your account. Please try again.'));
     }
   });

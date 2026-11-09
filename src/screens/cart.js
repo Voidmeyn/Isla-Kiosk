@@ -1,10 +1,10 @@
-// "Your Order" (ORDERS(CART) frame): line items, Isla Rewards (QR sign-in, voucher,
-// points-as-discount with keypad input, free reward drinks), payment method, totals,
-// Place Order → payment → order confirmation.
+
+
+
 import { h, mount } from '../core/dom.js';
 import {
   store, updateQty, removeLine, clearCart, itemCount, lineTotal, totals,
-  pointsBalance, rewardPointsInCart, maxUsablePoints, setPointsToUse,
+  pointsBalance, rewardPointsInCart,
 } from '../core/store.js';
 import { router } from '../core/router.js';
 import { scanToSignIn } from '../core/session.js';
@@ -12,18 +12,15 @@ import { productById, addonById } from '../data/menu.js';
 import { paymentService, orderService } from '../services/api.js';
 import { money, negMoney, plural, firstName } from '../core/format.js';
 import { icon, backButton, orderTypePill, stepper, withBusy } from '../ui/components.js';
-import { openOverlay, statusDialog, confirmDialog, toast } from '../ui/overlay.js';
-import { openKeypad } from '../ui/keypad.js';
+import { openOverlay, statusDialog, confirmDialog } from '../ui/overlay.js';
 import { icons } from '../ui/icons.js';
 import { idle } from '../core/idle.js';
-import { config } from '../config.js';
 
 const METHODS = [
-  { id: 'card', label: 'Cards', hint: 'Scan you card to pay', icon: 'card' },
-  { id: 'ewallet', label: 'E-Wallet', hint: '(G-cash, Maya, etc)', icon: 'wallet' },
+  { id: 'card', label: 'Card · Demo', hint: 'Simulated · no charge', icon: 'card' },
+  { id: 'ewallet', label: 'E-Wallet · Demo', hint: 'Simulated · no charge', icon: 'wallet' },
   { id: 'cash', label: 'Cash', hint: 'Pay with cash on the counter', icon: 'cash' },
 ];
-const ptsToPeso = (p) => p * config.pesoPerPoint;
 
 export function cartScreen() {
   const body = h('div', { class: 'cart__body scroll' });
@@ -49,15 +46,6 @@ export function cartScreen() {
       }));
   }
 
-  async function enterPoints() {
-    const max = maxUsablePoints();
-    const v = await openKeypad({ label: `Points to use (max ${max})`, maxLength: 5, placeholder: `Up to ${max} pts` });
-    if (v === undefined || v === '') return;
-    const want = parseInt(v, 10) || 0;
-    const applied = setPointsToUse(want);
-    if (applied !== want) toast(applied ? `Applied ${applied} pts (points are used in steps of ${config.pointsStep}, up to ${max})` : `You can use up to ${max} pts on this order`);
-  }
-
   function rewardsSection(s) {
     const t = totals(s);
     if (s.mode !== 'member') {
@@ -65,14 +53,12 @@ export function cartScreen() {
         h('span', { class: 'loyalty__qr' }, icon('scanQr')),
         h('div', { class: 'loyalty__text' },
           h('strong', {}, t.pointsToEarn ? `Earn ${t.pointsToEarn} points on this order` : 'Earn points on this order'),
-          h('small', {}, 'Scan the QR in your Isla app to collect points and use your rewards.')),
-        h('button', { class: 'btn btn--primary btn--sm', type: 'button', onClick: () => scanToSignIn({ midOrder: true }) }, 'Scan QR'));
+          h('small', {}, 'Scan the kiosk QR with your phone to collect points and use your rewards.')),
+        h('button', { class: 'btn btn--primary btn--sm', type: 'button', onClick: () => scanToSignIn({ midOrder: true }) }, 'Log in with phone'));
     }
     const balance = pointsBalance(s);
     const avail = balance - rewardPointsInCart(s);
-    const max = maxUsablePoints(s);
     const coupon = s.user?.coupons?.[0];
-    const quick = [50, 100, 200].filter((q) => q <= max);
 
     return h('section', { class: 'loyalty', 'aria-label': 'Isla Rewards' },
       h('header', { class: 'loyalty__head' },
@@ -80,28 +66,18 @@ export function cartScreen() {
           h('span', { class: 'eyebrow' }, 'Isla Rewards'),
           h('strong', { class: 'loyalty__name' }, firstName(s.user.fullName))),
         h('div', { class: 'loyalty__balance' },
-          h('strong', {}, String(avail - t.pointsUsed)),
-          h('small', {}, `pts left${rewardPointsInCart(s) || t.pointsUsed ? ` of ${balance}` : ''}`))),
+          h('strong', {}, String(avail)),
+          h('small', {}, `pts left${rewardPointsInCart(s) ? ` of ${balance}` : ''}`))),
 
       coupon && h('button', {
         class: ['coupon', s.useCoupon && 'is-on'], type: 'button', role: 'switch', 'aria-checked': String(s.useCoupon),
-        onClick: () => { store.set({ useCoupon: !s.useCoupon }); setPointsToUse(store.get().pointsToUse); },
+        onClick: () => store.set({ useCoupon: !s.useCoupon }),
       },
         icon('gift', 'coupon__icon'),
-        h('span', { class: 'coupon__text' }, h('strong', {}, `Use Your ₱${coupon.amount} off coupon.`), h('small', {}, 'Apply your reward points for a discount')),
+        h('span', { class: 'coupon__text' }, h('strong', {}, `Use Your ₱${coupon.amount} off coupon.`), h('small', {}, 'Apply this coupon to your order')),
         h('span', { class: 'switch', 'aria-hidden': 'true' }, h('span'))),
 
-      h('div', { class: 'points-use' },
-        h('div', { class: 'points-use__text' },
-          icon('coin', 'points-use__icon'),
-          h('span', {},
-            h('strong', {}, t.pointsUsed ? `Using ${t.pointsUsed} pts  (−${money(t.pointsDiscount)})` : 'Use points as a discount'),
-            h('small', {}, `${Math.round(1 / config.pesoPerPoint)} pts = ₱1 · up to ${max} pts on this order`))),
-        h('div', { class: 'points-use__actions' },
-          quick.map((q) => h('button', { class: ['chip', 'chip--sm'], type: 'button', 'aria-pressed': String(t.pointsUsed === q), onClick: () => setPointsToUse(q) }, `${q}`)),
-          max > 0 && h('button', { class: ['chip', 'chip--sm'], type: 'button', 'aria-pressed': String(t.pointsUsed === max && max > 0), onClick: () => setPointsToUse(max) }, 'Max'),
-          h('button', { class: 'btn btn--outline btn--sm points-use__enter', type: 'button', disabled: max === 0 && !t.pointsUsed, onClick: enterPoints }, icon('keypad', 'btn__icon'), 'Enter points'),
-          t.pointsUsed > 0 && h('button', { class: 'link-btn', type: 'button', onClick: () => setPointsToUse(0) }, 'Remove'))),
+      h('p', { class: 'rewards-note' }, icon('starFill'), 'Points can be redeemed for free drinks in Available Rewards.'),
 
       h('div', { class: 'loyalty__foot' },
         h('span', {}, icon('sparkle'), t.pointsToEarn ? `You’ll earn +${t.pointsToEarn} pts with this order` : 'Reward drinks don’t earn points'),
@@ -111,10 +87,11 @@ export function cartScreen() {
   function paymentSection(s, t) {
     if (t.total <= 0) {
       return h('section', { class: 'payment payment--covered' }, h('h2', { class: 'section-title' }, 'Payment Method'),
-        h('p', { class: 'covered-note' }, icon('starFill'), 'Fully covered by your rewards — nothing to pay.'));
+        h('p', { class: 'covered-note' }, icon('starFill'), 'No payment is due for this order.'));
     }
     return h('section', { class: 'payment', 'aria-label': 'Payment Method' },
       h('h2', { class: 'section-title' }, 'Payment Method'),
+      h('p', { class: 'payment__notice' }, 'Demo checkout only: card and e-wallet payments are simulated; no money will be charged. Cash is paid at the counter.'),
       h('div', { class: 'payment__grid', role: 'radiogroup', 'aria-label': 'Payment Method' },
         METHODS.map((m) => h('button', {
           class: 'pay-option', type: 'button', role: 'radio', 'aria-checked': String(s.paymentMethod === m.id),
@@ -131,7 +108,6 @@ export function cartScreen() {
       h('dl', {},
         h('div', {}, h('dt', {}, 'Subtotal'), h('dd', {}, money(t.subtotal))),
         h('div', {}, h('dt', {}, 'Discount coupon'), h('dd', {}, t.voucher ? negMoney(t.voucher) : money(0))),
-        s.mode === 'member' && h('div', {}, h('dt', {}, `Points discount${t.pointsUsed ? ` (${t.pointsUsed} pts)` : ''}`), h('dd', {}, t.pointsDiscount ? negMoney(t.pointsDiscount) : money(0))),
         t.rewardPoints > 0 && h('div', {}, h('dt', {}, 'Reward drinks'), h('dd', {}, `${t.rewardPoints} pts`)),
         h('div', {}, h('dt', {}, 'Service Fee'), h('dd', {}, money(t.serviceFee))),
         h('div', { class: 'summary__total' }, h('dt', {}, 'Total'), h('dd', {}, money(t.total)))));
@@ -168,21 +144,21 @@ export function cartScreen() {
   async function placeOrder(button) {
     const s = store.get();
     const t = totals(s);
-    idle.pause(); // never reset the kiosk mid-payment
+    idle.pause();
     try {
       let payment;
       if (t.total <= 0) payment = { status: 'paid', method: 'rewards' };
       else if (s.paymentMethod === 'cash') payment = { status: 'pending', method: 'cash' };
       else {
         payment = await runPayment(s.paymentMethod, t.total);
-        if (!payment) return; // customer cancelled
+        if (!payment) return;
       }
       const receipt = await withBusy(button, () => orderService.place({
         cart: s.cart, orderType: s.orderType, payment, totals: t,
         user: s.mode === 'member' ? s.user : null,
         couponId: t.voucher ? s.user?.coupons?.[0]?.id : null,
       }), 'Placing order…');
-      store.set({ lastOrder: receipt, cart: [], useCoupon: false, pointsToUse: 0, user: receipt.profile || s.user });
+      store.set({ lastOrder: receipt, cart: [], useCoupon: false, user: receipt.profile || s.user });
       router.go('confirmation', {}, { reset: true, transition: 'fade' });
     } catch (e) {
       const retry = await statusDialog({
@@ -208,23 +184,23 @@ export function cartScreen() {
   return { el, onLeave: unsub };
 }
 
-/**
- * Card / e-wallet payment sheet. Resolves the payment result, or null if cancelled.
- * Retries on decline.
- */
+
+
+
+
 function runPayment(method, amount) {
   return new Promise((resolve) => {
     let cancelled = false;
     const isCard = method === 'card';
-    const status = h('p', { class: 'pay-sheet__status' }, h('span', { class: 'spinner' }), 'Waiting for payment…');
+    const status = h('p', { class: 'pay-sheet__status' }, h('span', { class: 'spinner' }), 'Simulating payment — no money will be charged.');
     const visual = isCard
       ? h('div', { class: 'pay-sheet__visual' }, icon('tap'))
       : h('div', { class: 'pay-sheet__qr', 'aria-label': 'Demo QR code' }, icon('qr'), h('small', {}, 'DEMO QR — not a real payment code'));
     let ov;
     const body = h('div', { class: 'modal' },
       h('div', { class: 'modal__body status pay-sheet' },
-        h('h2', { class: 'status__title' }, isCard ? 'Tap or insert your card' : 'Scan to pay'),
-        h('p', { class: 'status__text' }, isCard ? 'Use the card terminal below the screen.' : 'Open GCash, Maya or your banking app and scan the code.'),
+        h('h2', { class: 'status__title' }, isCard ? 'Demo card payment' : 'Demo e-wallet payment'),
+        h('p', { class: 'status__text' }, isCard ? 'No card terminal is connected. This test simulates approval only.' : 'No GCash, Maya or bank payment is connected. This test simulates approval only.'),
         visual,
         h('p', { class: 'pay-sheet__amount' }, money(amount)),
         status,

@@ -1,7 +1,7 @@
-// Service worker: makes the kiosk work offline after the first load and survive
-// flaky Wi-Fi. App files are precached; Google Fonts are cached at runtime.
-// After changing app files run `node tools/gen-precache.mjs` to refresh this list.
-const VERSION = 'isla-mw2bytpd';
+
+
+
+const VERSION = 'isla-mw9iwae4';
 const PRECACHE = [
   './',
   './assets/icons/card.svg',
@@ -48,6 +48,7 @@ const PRECACHE = [
   './assets/img/logo.webp',
   './index.html',
   './manifest.webmanifest',
+  './server/database.js',
   './src/config.js',
   './src/core/dom.js',
   './src/core/format.js',
@@ -66,16 +67,14 @@ const PRECACHE = [
   './src/screens/menu.js',
   './src/screens/rewards.js',
   './src/services/api.js',
-  './src/services/scanner.js',
   './src/services/storage.js',
   './src/ui/admin.js',
   './src/ui/components.js',
   './src/ui/icons.js',
   './src/ui/keyboard.js',
   './src/ui/keypad.js',
-  './src/ui/memberQr.js',
+  './src/ui/kioskQrLogin.js',
   './src/ui/overlay.js',
-  './src/ui/qrLogin.js',
   './src/vendor/qrcode.js',
   './styles/base.css',
   './styles/components.css',
@@ -99,7 +98,11 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
 
-  // Fonts: cache-first (they never change for a given URL).
+  if (url.origin === self.location.origin && (url.pathname.startsWith('/api/') || url.pathname.startsWith('/member/'))) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
     event.respondWith(caches.open(`${VERSION}-fonts`).then(async (cache) => {
       const hit = await cache.match(request);
@@ -111,8 +114,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Same-origin app files: cache-first, then network (and cache the result).
-  // ▶ INTEGRATION POINT: if you add a real API on the same origin, exclude it here (e.g. url.pathname.startsWith('/api/')).
+
+
   if (url.origin === self.location.origin) {
     event.respondWith(caches.match(request, { ignoreSearch: request.mode === 'navigate' }).then((hit) => hit || fetch(request).then((res) => {
       if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(request, copy)); }

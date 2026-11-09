@@ -1,6 +1,6 @@
-// LOCAL MOCK CATALOG — names, prices, categories and photos taken from the Figma design.
-// INTEGRATION POINT: replace with a fetch from your POS / menu service in services/api.js
-// (menuService.getCatalog). Keep the same shape so the UI needs no changes.
+
+
+
 
 const img = (slug) => `assets/img/drinks/${slug}.webp`;
 
@@ -14,7 +14,7 @@ export const categories = [
   { id: 'hot', label: 'Hot' },
 ];
 
-// Order matches the "All" grid in the design, then the remaining category items.
+
 export const products = [
   { id: 'caffe-latte', name: 'Caffe Latte', price: 59, category: 'espresso' },
   { id: 'spanish-latte', name: 'Spanish Latte', price: 59, category: 'espresso' },
@@ -27,7 +27,7 @@ export const products = [
   { id: 'java-chips', name: 'Java Chips', price: 59, category: 'espresso' },
   { id: 'einspanner-latte', name: 'Einspanner Latte', price: 59, category: 'espresso' },
   { id: 'matcha-espresso', name: 'Matcha Espresso', price: 59, category: 'matcha' },
-  // Design shows "Php 59" on the card but ₱75 in the add-ons modal/cart; the cart math is used.
+
   { id: 'merry-matcha', name: 'Merry Matcha', price: 75, category: 'matcha' },
   { id: 'strawberry', name: 'Strawberry', price: 59, category: 'milk' },
   { id: 'dark-cocoa', name: 'Dark Cocoa', price: 59, category: 'milk' },

@@ -1,4 +1,4 @@
-// Reusable UI building blocks that mirror components in the Figma file.
+
 import { h, svg } from '../core/dom.js';
 import { icons } from './icons.js';
 import { store } from '../core/store.js';
@@ -10,7 +10,7 @@ export function backButton(onClick, label = 'Back') {
   return h('button', { class: 'back-btn', type: 'button', onClick }, icon('arrowLeft'), label);
 }
 
-/** Brown "Dine In" pill. Tapping toggles Dine In / Take out. */
+
 export function orderTypePill() {
   const label = () => (store.get().orderType === 'take-out' ? 'Take out' : 'Dine In');
   const btn = h('button', {
@@ -24,14 +24,14 @@ export function orderTypePill() {
   return btn;
 }
 
-/** "👤 Ashly" / "👤 Guest" chip. */
+
 export function userChip(onClick) {
   const s = store.get();
   const name = s.mode === 'member' ? firstName(s.user?.fullName) : 'Guest';
   return h('button', { class: 'user-chip', type: 'button', onClick, 'aria-label': `Account: ${name}` }, icon('personBadge'), name);
 }
 
-/** Button that shows a spinner while `task` runs and is disabled meanwhile. */
+
 export async function withBusy(button, task, busyLabel) {
   const original = [...button.childNodes];
   button.disabled = true;
@@ -45,7 +45,7 @@ export async function withBusy(button, task, busyLabel) {
   }
 }
 
-/** Material-style checkbox from the design's "Checkboxes" component. */
+
 export function checkbox({ label, checked = false, onChange, id }) {
   const input = h('input', { type: 'checkbox', id, onChange: (e) => onChange?.(e.target.checked) });
   input.checked = checked;

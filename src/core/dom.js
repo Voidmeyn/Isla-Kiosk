@@ -1,12 +1,12 @@
-// Tiny DOM helpers — no framework, so the kiosk has zero runtime dependencies.
 
-/**
- * h('button', { class: 'btn', onClick: fn, 'aria-label': 'x' }, 'Text', child, [more])
- * - `class` accepts a string or an array (falsy entries ignored)
- * - `on<Event>` attaches listeners
- * - `style` accepts a string or object
- * - `html` sets innerHTML (only use with trusted, static markup such as icons)
- */
+
+
+
+
+
+
+
+
 export function h(tag, props = {}, ...children) {
   const el = document.createElement(tag);
   for (const [key, value] of Object.entries(props || {})) {
@@ -32,13 +32,13 @@ export function append(parent, children) {
   return parent;
 }
 
-/** Replace all children of `el`. */
+
 export function mount(el, ...children) {
   el.replaceChildren();
   return append(el, children);
 }
 
-/** Inline SVG from a markup string (trusted, bundled icons only). */
+
 export function svg(markup, className) {
   const tpl = document.createElement('template');
   tpl.innerHTML = markup.trim();
@@ -49,7 +49,7 @@ export function svg(markup, className) {
   return node;
 }
 
-/** Fire `fn` on a long press (staff/admin gestures). Returns a cleanup fn. */
+
 export function onLongPress(el, ms, fn) {
   let timer = null;
   const start = () => { clear(); timer = setTimeout(fn, ms); };

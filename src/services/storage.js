@@ -1,5 +1,5 @@
-// Safe localStorage wrapper. Kiosk browsers may run in private/guest profiles where
-// storage throws or is wiped; everything falls back to memory so the UI never breaks.
+
+
 
 const memory = new Map();
 
@@ -14,10 +14,10 @@ export const storage = {
   },
   set(key, value) {
     memory.set(key, value);
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* memory only */ }
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch {   }
   },
   remove(key) {
     memory.delete(key);
-    try { localStorage.removeItem(key); } catch { /* ignore */ }
+    try { localStorage.removeItem(key); } catch {   }
   },
 };

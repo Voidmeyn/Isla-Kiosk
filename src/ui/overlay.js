@@ -1,14 +1,14 @@
-// Modals, status dialogs, confirmations, popovers and toasts.
+
 import { h, svg } from '../core/dom.js';
 import { icons } from './icons.js';
 
 const stack = [];
 const root = () => document.getElementById('overlay-root');
 
-/**
- * Open an overlay containing `content`.
- * @returns {{ el: HTMLElement, close: (result?: any) => void, closed: Promise<any> }}
- */
+
+
+
+
 export function openOverlay(content, { dismissible = true, onClose, placement = 'center', label = 'Dialog' } = {}) {
   let resolve;
   const closed = new Promise((r) => (resolve = r));
@@ -33,7 +33,7 @@ export function openOverlay(content, { dismissible = true, onClose, placement = 
   const entry = { el, close, dismissible };
   stack.push(entry);
   root().append(el);
-  // Focus first actionable control for accessibility / hardware keyboards.
+
   requestAnimationFrame(() => el.querySelector('[data-autofocus], button, [tabindex="0"]')?.focus({ preventScroll: true }));
   return { el, close, closed };
 }
@@ -51,11 +51,11 @@ document.addEventListener('keydown', (e) => {
 export const closeButton = (onClick) =>
   h('button', { class: 'icon-btn modal__close', 'aria-label': 'Close', onClick }, svg(icons.close));
 
-/**
- * Status dialog used for: Account Created, Log in Successfully, Continue as Guest,
- * Added to Order, Reward Redeem, and error states.
- * Resolves `true` when the primary action is pressed, `undefined` if dismissed.
- */
+
+
+
+
+
 export function statusDialog({ icon = icons.checkBig, title, text, actionLabel = 'Continue', tone, secondaryLabel, dismissible = true, autoCloseMs = 0 }) {
   let ov;
   let timer;
@@ -75,13 +75,13 @@ export function statusDialog({ icon = icons.checkBig, title, text, actionLabel =
   return ov.closed;
 }
 
-/** Yes/No confirmation. Resolves true/false. */
+
 export function confirmDialog({ title, text, confirmLabel = 'Yes', cancelLabel = 'Cancel', icon = icons.alert, tone }) {
   return statusDialog({ icon, title, text, actionLabel: confirmLabel, secondaryLabel: cancelLabel, tone })
     .then((r) => r === true);
 }
 
-/** Simple info sheet with arbitrary content (Terms, Forgot PIN …). */
+
 export function infoDialog({ title, content, actionLabel = 'Got it' }) {
   let ov;
   const body = h('div', { class: 'modal' },

@@ -1,4 +1,4 @@
-// "Order Confirmed!" screen — order number, receipt, points summary, auto-restart countdown.
+
 import { h } from '../core/dom.js';
 import { store } from '../core/store.js';
 import { router } from '../core/router.js';
@@ -7,7 +7,7 @@ import { money, negMoney } from '../core/format.js';
 import { icon, logo } from '../ui/components.js';
 import { config } from '../config.js';
 
-const PAY_LABEL = { cash: 'Cash', card: 'Card · Paid', ewallet: 'E-Wallet · Paid', rewards: 'Isla Rewards' };
+const PAY_LABEL = { cash: 'Cash · Due at counter', card: 'Card · Demo approved', ewallet: 'E-Wallet · Demo approved', rewards: 'Isla Rewards' };
 
 export function confirmationScreen() {
   const s = store.get();
@@ -17,15 +17,15 @@ export function confirmationScreen() {
   const payAtCounter = r.payment.method === 'cash';
   const pickup = payAtCounter ? 'Pay at the counter when your number is called.' : 'Pick up at the bar when your number is called.';
 
-  // Points summary (members)
+
   const pointsBox = isMember
     ? h('div', { class: 'points-summary' },
       h('div', {}, h('small', {}, 'Earned'), h('strong', { class: 'is-positive' }, `+${r.pointsEarned}`)),
-      h('div', {}, h('small', {}, 'Used'), h('strong', {}, r.pointsUsed + r.rewardsCost ? `−${r.pointsUsed + r.rewardsCost}` : '0')),
+      h('div', {}, h('small', {}, 'Redeemed for drinks'), h('strong', {}, r.rewardsCost ? `−${r.rewardsCost}` : '0')),
       h('div', {}, h('small', {}, 'New balance'), h('strong', {}, `${r.profile?.points ?? s.user?.points} pts`)))
     : null;
 
-  // Auto-restart countdown (McDo-style) so the next customer starts fresh.
+
   let left = config.confirmationResetSec;
   const countText = h('span', {}, String(left));
   const ring = h('span', { class: 'countdown', style: { animationDuration: `${left}s` }, 'aria-hidden': 'true' });
@@ -56,12 +56,11 @@ export function confirmationScreen() {
             h('span', { class: 'receipt__price' }, l.reward ? 'FREE' : money(l.amount))))),
         h('hr'),
         r.totals.voucher > 0 && h('div', { class: 'receipt__row' }, h('span', {}, 'Rewards discount'), h('strong', { class: 'is-positive' }, negMoney(r.totals.voucher))),
-        r.totals.pointsDiscount > 0 && h('div', { class: 'receipt__row' }, h('span', {}, `Points discount (${r.totals.pointsUsed} pts)`), h('strong', { class: 'is-positive' }, negMoney(r.totals.pointsDiscount))),
         h('div', { class: 'receipt__row' }, h('span', {}, 'Payment'), h('strong', {}, PAY_LABEL[r.payment.method] || r.payment.method)),
         h('div', { class: 'receipt__row receipt__row--total' }, h('span', {}, 'Total'), h('strong', {}, money(r.totals.total))),
         pointsBox,
         h('p', { class: 'receipt__note' }, icon(isMember ? 'star' : 'clock'),
-          isMember ? `You earned ${r.pointsEarned} points. ${pickup}` : `${pickup} Scan your Isla QR next time to earn points.`)),
+          isMember ? `You earned ${r.pointsEarned} points. ${pickup}${r.payment.method !== 'cash' && r.payment.simulated ? ' Demo payment only; no money was charged.' : ''}` : `${pickup} Scan the kiosk QR with your phone next time to earn points.`)),
       h('div', { class: 'confirm__actions' },
         h('button', { class: 'btn btn--primary btn--lg btn--block', 'data-autofocus': true, onClick: () => router.go('menu', {}, { reset: true, transition: 'fade' }) }, 'Back to Menu'),
         isMember

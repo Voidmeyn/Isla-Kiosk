@@ -1,4 +1,4 @@
-// "Customize Your Add-ons" modal → "Added to Order!" confirmation.
+
 import { h, mount } from '../core/dom.js';
 import { addToCart, store } from '../core/store.js';
 import { config } from '../config.js';

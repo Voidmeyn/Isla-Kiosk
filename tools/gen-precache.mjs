@@ -1,12 +1,12 @@
-// Regenerates the PRECACHE list in sw.js from the files on disk and bumps the cache version.
-// Run after adding/removing app files:  node tools/gen-precache.mjs
+
+
 import { readdirSync, statSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const include = /\.(html|js|css|webp|jpg|png|svg|webmanifest)$/;
-const skipDirs = new Set(['kiosk', 'tools', 'node_modules', '.git', 'docs']);
+const skipDirs = new Set(['kiosk', 'tools', 'node_modules', '.git', 'docs', 'member']);
 const skipFiles = new Set(['sw.js', 'server.js']);
 
 function walk(dir, out = []) {

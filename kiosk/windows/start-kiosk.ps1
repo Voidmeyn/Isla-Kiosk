@@ -1,7 +1,7 @@
-# Isla Kiosk - Windows PowerShell launcher (same behaviour as start-kiosk.bat).
-# Run:  powershell -ExecutionPolicy Bypass -File .\start-kiosk.ps1 [-Url https://kiosk.example.com/] [-Browser chrome]
+
+
 param(
-  [string]$Url = "http://localhost:8080/?view=portrait&preview=0&keyboard=always",
+  [string]$Url = "http://localhost:8080/?keyboard=always",
   [ValidateSet("edge", "chrome")] [string]$Browser = "edge"
 )
 $appDir = Resolve-Path (Join-Path $PSScriptRoot "..\..")

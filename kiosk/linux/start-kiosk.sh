@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
-# Isla Kiosk - Linux / Raspberry Pi launcher (Chromium kiosk mode). Optional extra platform.
-KIOSK_URL="${KIOSK_URL:-http://localhost:8080/?view=portrait&preview=0&keyboard=always}"
+
+
+KIOSK_URL="${KIOSK_URL:-http://localhost:8080/?keyboard=always}"
 APP_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 if [[ "$KIOSK_URL" == *localhost* ]] && command -v node >/dev/null; then
   (cd "$APP_DIR" && nohup node server.js >/tmp/isla-kiosk-server.log 2>&1 &); sleep 2

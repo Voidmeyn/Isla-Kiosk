@@ -1,19 +1,19 @@
-// Numeric keypad modal (design frame: "input number modal").
-// Used for Student ID and PIN entry so no OS keyboard is ever needed for those fields.
+
+
 import { h, svg } from '../core/dom.js';
 import { icons } from './icons.js';
 import { openOverlay, closeButton } from './overlay.js';
 
-/**
- * @param {object} opts
- * @param {string} opts.label         heading shown above the display
- * @param {string} opts.value         starting value
- * @param {number} opts.maxLength     max digits (dash not counted)
- * @param {boolean} opts.secret       mask digits (PIN)
- * @param {boolean} opts.allowDash    show a "-" key (Student ID like 2023-00123)
- * @param {string} opts.placeholder
- * @returns {Promise<string|undefined>} the confirmed value, or undefined if cancelled
- */
+
+
+
+
+
+
+
+
+
+
 export function openKeypad({ label, value = '', maxLength = 12, secret = false, allowDash = false, placeholder = '' }) {
   let current = value;
   let ov;

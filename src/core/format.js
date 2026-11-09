@@ -1,16 +1,16 @@
-// Currency / text formatting used across screens.
+
 const peso = new Intl.NumberFormat('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/** ₱ 86.00 (design style for cart/receipt) */
+
 export const money = (n) => `₱ ${peso.format(n)}`;
-/** -₱ 20.00 */
+
 export const negMoney = (n) => `-₱ ${peso.format(n)}`;
-/** Php 59 (design style for menu cards) */
+
 export const php = (n) => `Php ${Number.isInteger(n) ? n : peso.format(n)}`;
-/** Php 0.00 (order panel subtotal) */
+
 export const phpFixed = (n) => `Php ${peso.format(n)}`;
 
-/** "Ashly Nicle Mamites" → "AM" (first + last name, as in the design) */
+
 export function initials(name = '') {
   const parts = name.split(/\s+/).filter(Boolean);
   if (!parts.length) return '?';
@@ -18,14 +18,14 @@ export function initials(name = '') {
 }
 export const firstName = (name = '') => name.trim().split(/\s+/)[0] || name;
 
-/** 7230509 → 72***09 (matches the rewards screen) */
+
 export function maskId(id = '') {
   const d = String(id);
   if (d.length <= 4) return d;
   return `${d.slice(0, 2)}${'*'.repeat(Math.max(3, d.length - 4)).slice(0, 3)}${d.slice(-2)}`;
 }
 
-/** Nov 03,2026 — design date style */
+
 export function shortDate(iso) {
   const d = new Date(iso);
   const m = d.toLocaleString('en-US', { month: 'short' });

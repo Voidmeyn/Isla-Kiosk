@@ -1,8 +1,8 @@
-#!/bin/bash
-# Isla Kiosk - macOS launcher (Google Chrome kiosk mode).
-# Double-click in Finder, or add to System Settings > General > Login Items
-# on an auto-login kiosk user. Staff exit: Cmd+Q (with a keyboard).
-KIOSK_URL="${KIOSK_URL:-http://localhost:8080/?view=portrait&preview=0&keyboard=always}"
+
+
+
+
+KIOSK_URL="${KIOSK_URL:-http://localhost:8080/?keyboard=always}"
 APP_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 
 if [[ "$KIOSK_URL" == *localhost* || "$KIOSK_URL" == *127.0.0.1* ]]; then
@@ -14,7 +14,7 @@ if [[ "$KIOSK_URL" == *localhost* || "$KIOSK_URL" == *127.0.0.1* ]]; then
   fi
 fi
 
-# Keep the display awake while the kiosk runs
+
 caffeinate -dimsu -w $$ &
 
 open -na "Google Chrome" --args --kiosk "$KIOSK_URL" --no-first-run --disable-pinch \

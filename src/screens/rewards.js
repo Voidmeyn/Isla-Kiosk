@@ -1,4 +1,4 @@
-// "user reward" frame: profile + member QR, points progress, rewards to add to the order, points history.
+
 import { h, mount } from '../core/dom.js';
 import { store, addRewardToCart, rewardPointsInCart } from '../core/store.js';
 import { router } from '../core/router.js';
@@ -7,7 +7,6 @@ import { rewardsService } from '../services/api.js';
 import { initials, maskId, shortDate } from '../core/format.js';
 import { icon, backButton, userChip } from '../ui/components.js';
 import { statusDialog } from '../ui/overlay.js';
-import { memberQrCard } from '../ui/memberQr.js';
 import { icons } from '../ui/icons.js';
 import { config } from '../config.js';
 
@@ -48,7 +47,8 @@ export function rewardsScreen() {
     const { profile, nextReward, catalog, history } = data;
     const reserved = rewardPointsInCart();
     const avail = profile.points - reserved;
-    const pct = Math.min(100, Math.round((profile.points / nextReward.target) * 100));
+    const target = nextReward?.cost || Math.max(...catalog.map((reward) => reward.cost));
+    const pct = Math.min(100, Math.round((profile.points / target) * 100));
     const idText = h('span', {}, showId ? profile.studentId : maskId(profile.studentId));
     const eyeBtn = h('button', { class: 'icon-btn rewards__eye', 'aria-label': showId ? 'Hide Student ID' : 'Show Student ID', onClick: () => { showId = !showId; render(); } }, icon(showId ? 'eyeOff' : 'eye'));
 
@@ -61,11 +61,10 @@ export function rewardsScreen() {
             h('p', { class: 'profile-card__id' }, 'Student ID - ', idText, eyeBtn)),
           h('div', { class: 'profile-card__points' }, h('strong', {}, String(profile.points)), h('span', {}, 'points'))),
         h('div', { class: 'progress' },
-          h('div', { class: 'progress__labels' }, h('span', {}, `Next: ${nextReward.name}`), h('small', {}, `${profile.points}/ ${nextReward.target} points`)),
-          h('div', { class: 'progress__track', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(nextReward.target), 'aria-valuenow': String(profile.points) },
+          h('div', { class: 'progress__labels' }, h('span', {}, nextReward ? `Next: Free ${nextReward.name}` : 'All rewards unlocked'), h('small', {}, `${profile.points}/ ${target} points`)),
+          h('div', { class: 'progress__track', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(target), 'aria-valuenow': String(Math.min(profile.points, target)) },
             h('div', { class: 'progress__bar', style: { width: `${pct}%` } })),
-          h('p', { class: 'progress__hint' }, `You earn ${config.pointsPerDrink} points with every drink you order! Use points at checkout: ${Math.round(1 / config.pesoPerPoint)} pts = ₱1.`)),
-        memberQrCard(profile, { compact: true })),
+          h('p', { class: 'progress__hint' }, `Earn ${config.pointsPerDrink} points per paid drink. Redeem points for free drinks below.`))),
       h('h2', { class: 'section-title section-title--display' }, 'Available Rewards'),
       h('div', { class: 'reward-grid' }, catalog.map((r) => {
         const short = avail < r.cost;
@@ -90,6 +89,6 @@ export function rewardsScreen() {
   const el = h('section', { class: 'rewards' },
     h('header', { class: 'topbar' }, backButton(() => router.back('menu')), userChip(openUserMenu)),
     h('div', { class: 'rewards__scroll scroll' }, content),
-    h('p', { class: 'footnote menu__note' }, 'Orders now to earn student point or rewards.'));
+    h('p', { class: 'footnote menu__note' }, 'Order to earn points and redeem free drinks.'));
   return { el };
 }

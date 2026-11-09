@@ -1,6 +1,6 @@
-/* =====================================================================
-   Shared screen typography & layout
-   ===================================================================== */
+
+
+
 .topbar {
   display: flex; align-items: center; justify-content: space-between; gap: 2rem;
   padding: 3.6rem 4.2rem 0; flex: none; position: relative; z-index: 2;
@@ -29,7 +29,7 @@
 .section-title--display { font-weight: 500; font-size: 4.8rem; color: #1d1208; }
 .is-positive { color: var(--c-success); }
 
-/* Empty / error states */
+
 .empty-state {
   display: grid; justify-items: center; align-content: center; gap: 1.6rem; text-align: center;
   padding: 6rem 3rem; min-height: 30rem;
@@ -40,9 +40,9 @@
 .empty-state__title { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 4.4rem; color: var(--c-text-strong); letter-spacing: 0; }
 .empty-state__text { margin: 0 0 1.6rem; font-size: 2.6rem; color: var(--c-text); }
 
-/* =====================================================================
-   SPLASH
-   ===================================================================== */
+
+
+
 .splash { display: grid; grid-template-rows: 1fr auto auto; justify-items: center; padding: 4rem 4rem 5rem; gap: 4rem; }
 .splash__brand { align-self: end; display: grid; place-items: center; }
 .splash__logo { width: min(90rem, 100%); max-height: 90rem; object-fit: contain; margin-bottom: -8rem; }
@@ -68,9 +68,9 @@
 .splash__choice svg { width: 13rem; height: 12rem; }
 .splash__choice:active { transform: scale(0.97); background: rgba(75, 52, 35, 0.9); }
 
-/* =====================================================================
-   ENTRY SCREENS (welcome, guest, login, signup)
-   ===================================================================== */
+
+
+
 .entry { overflow: hidden; }
 .entry__inner {
   flex: 1; min-height: 0; overflow-y: auto; width: 100%; max-width: 96rem; margin: 0 auto;
@@ -119,15 +119,15 @@
 .auth-card__split .btn { padding: 0 1.6rem; font-size: 3.2rem; }
 .auth-card__agree { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; margin-top: -1rem; }
 .auth-card__agree .link-btn { padding-left: 0; }
-.auth-card--signup { gap: 1.6rem; padding: 3.6rem 4rem; }
+.auth-card--signup { gap: 1.6rem; padding: 3.6rem 4rem; margin-top: 3.4rem; }
 .auth-card--signup .field__control { min-height: 8.4rem; font-size: 3.2rem; }
 .entry--form .entry__inner { justify-content: flex-start; padding-top: 4rem; }
-.demo-hint { margin: 0; text-align: center; font-size: 2.2rem; color: var(--c-muted); font-weight: 500; }
+.entry--form .footnote { margin-top: 3rem; }
 .info-content .lead, .terms p { font-family: var(--f-ui); font-weight: 500; font-size: 2.8rem; color: var(--c-text); line-height: 1.5; margin: 0 0 1.6rem; }
 
-/* =====================================================================
-   MENU — McDo-style: rail + cards + order bar
-   ===================================================================== */
+
+
+
 .menu__topbar { padding: 2.6rem 3.6rem 0; }
 .menu__brand, .menu__account { display: flex; align-items: center; gap: 1.6rem; }
 .menu__logo { width: 13rem; height: 7rem; object-fit: contain; object-position: left center; margin: -1rem 0; }
@@ -138,8 +138,6 @@
 }
 .points-pill svg { width: 3rem; height: 3rem; color: #b07a2a; }
 .points-pill strong { font-size: 2.8rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-.points-pill--scan { background: var(--c-brand); color: #fff; }
-.points-pill--scan svg { color: #fff; }
 
 .menu__banner { padding: 2rem 3.6rem 0; flex: none; }
 .promo {
@@ -157,6 +155,7 @@
 .promo__cta { display: inline-flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 2.4rem; padding: 1.4rem 2.4rem; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.16); white-space: nowrap; }
 .promo--member .promo__cta { background: var(--c-brand); color: #fff; }
 .promo__cta svg { width: 2.8rem; height: 2.8rem; }
+.promo--notice { grid-template-columns: auto 1fr; cursor: default; }
 
 .menu__body { flex: 1; min-height: 0; display: grid; grid-template-columns: 19rem 1fr; gap: 2.4rem; padding: 2.4rem 3.6rem 0 2.4rem; }
 .rail { display: flex; flex-direction: column; gap: 1.2rem; padding: 0.4rem 0.4rem 2rem; scrollbar-width: none; }
@@ -249,23 +248,19 @@
 .order-bar__text em { font-style: normal; font-weight: 700; font-size: 2rem; color: #9a6a22; }
 .order-bar__btn { min-height: 10rem; min-width: 34rem; font-size: 3.4rem; font-weight: 700; border-radius: var(--r-md); }
 
-html.is-landscape .menu__body { grid-template-columns: 17rem 1fr; padding-top: 1.6rem; }
-html.is-landscape .menu__cards { grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr)); }
-html.is-landscape .menu__title { display: flex; align-items: baseline; gap: 3rem; flex-wrap: wrap; }
-html.is-landscape .menu__title .display { font-size: 6rem; }
-html.is-landscape .menu__banner { padding-top: 1.4rem; }
-html.is-landscape .promo { padding: 1.2rem 2.4rem; }
-html.is-landscape .promo__badge { width: 5.6rem; height: 5.6rem; }
-html.is-landscape .rail__thumb { width: 8.4rem; height: 8.4rem; }
-html.is-landscape .reward-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-html.is-landscape .order-bar { padding: 1.4rem 3.6rem 1.8rem; }
-html.is-landscape .order-bar__btn { min-height: 8rem; }
-html.is-narrow .menu__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
-
-/* =====================================================================
-   QR SCAN SHEET + MEMBER QR
-   ===================================================================== */
+.kiosk-qr-login { width: min(88rem, 100%); padding: 5.2rem 6rem 4.8rem; }
+.kiosk-qr-login__head { display: grid; justify-items: center; gap: 1.6rem; }
+.kiosk-qr-login__head .display { font-size: 5.6rem; }
+.kiosk-qr-login__head .lead { max-width: 66rem; font-size: 2.8rem; }
+.kiosk-qr-login__image {
+  width: 40rem; height: 40rem; max-width: 100%; margin: 3.2rem auto 1.6rem; padding: 1.4rem;
+  border: 0.3rem solid var(--c-divider); border-radius: 2.4rem; background: #fff;
+}
+.kiosk-qr-login__image svg { display: block; width: 100%; height: 100%; }
+.kiosk-qr-login__status { min-height: 4rem; margin: 0; display: flex; align-items: center; justify-content: center; gap: 1.4rem; text-align: center; font-size: 2.6rem; font-weight: 700; }
+.kiosk-qr-login__steps { display: grid; gap: 1rem; margin: 2.4rem 0; padding: 2.4rem; border-radius: var(--r-md); background: var(--c-sunken); color: var(--c-text); font-size: 2.2rem; }
+.kiosk-qr-login .btn + .btn { margin-top: 1.4rem; }
+.kiosk-qr-login [hidden] { display: none; }
 .qr-scan { width: min(95.2rem, 100%); }
 .qr-scan__head { padding: 5.2rem 6rem 0; text-align: center; display: grid; gap: 1rem; }
 .qr-scan__lead { margin: 0; font-size: 2.6rem; font-weight: 500; }
@@ -300,20 +295,10 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .qr-scan__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; margin: 3rem 6rem 0; }
 .qr-scan__actions .btn { font-size: 2.4rem; padding: 0 1.6rem; }
 .qr-scan > :last-child { margin-bottom: 4.8rem; }
-.demo-strip { display: flex; align-items: center; justify-content: center; gap: 2rem; margin: 2rem 6rem 0; padding: 1rem 2rem; border-radius: var(--r-sm); border: 0.15rem dashed var(--c-border); font-size: 2rem; color: var(--c-muted); }
-.demo-strip .link-btn { font-size: 2rem; min-height: 5rem; }
 
-.member-qr { display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center; padding: 2.4rem; border-radius: var(--r-md); background: var(--c-bg); border: 0.15rem dashed var(--c-border); }
-.member-qr__code { width: 24rem; height: 24rem; border-radius: 1.6rem; overflow: hidden; background: #fff; }
-.member-qr__code svg { width: 100%; height: 100%; display: block; }
-.member-qr__meta { display: grid; gap: 0.8rem; }
-.member-qr__number { font-weight: 800; font-size: 4.4rem; letter-spacing: 0.16em; color: var(--c-text-strong); font-variant-numeric: tabular-nums; }
-.member-qr__meta small { font-weight: 500; font-size: 2.2rem; }
-.member-qr--compact .member-qr__code { width: 20rem; height: 20rem; }
 
-/* =====================================================================
-   POINTS UI (cart loyalty panel, confirmation summary, menu popover)
-   ===================================================================== */
+
+
 .loyalty { display: grid; gap: 1.8rem; padding: 2.6rem 3rem; border-radius: var(--r-lg); background: #fbf5ea; border: 0.2rem solid #e4caa0; }
 .loyalty__head { display: flex; justify-content: space-between; align-items: center; }
 .loyalty__name { display: block; font-family: var(--f-display); font-weight: 700; font-size: 3.4rem; color: var(--c-text-strong); letter-spacing: 0; }
@@ -359,9 +344,9 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .popover__points svg { width: 2.6rem; height: 2.6rem; }
 .reward-card.is-locked img { opacity: 0.55; }
 .order-type--static { cursor: default; }
-/* =====================================================================
-   ADD-ONS MODAL (design 952×1585)
-   ===================================================================== */
+
+
+
 .addons { max-height: min(158.5rem, 100%); }
 .addons__head { padding: 5.6rem 6rem 2rem; text-align: center; }
 .addons__head .lead { font-family: var(--f-ui); font-size: 2.6rem; }
@@ -391,9 +376,9 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .addons__subtotal { display: flex; justify-content: space-between; padding: 0.4rem 1rem 1rem; font-size: 2.6rem; }
 .addons__subtotal strong { font-weight: 800; }
 
-/* =====================================================================
-   CART
-   ===================================================================== */
+
+
+
 .cart__head { padding: 2rem 6.4rem 0; flex: none; }
 .cart__head .display, .cart__head .lead { text-align: left; }
 .cart__body { flex: 1; min-height: 0; padding: 1rem 7.8rem 2rem; display: flex; flex-direction: column; gap: 2.4rem; }
@@ -428,6 +413,7 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .coupon.is-on .switch span { transform: translateX(4rem); }
 
 .payment { display: grid; gap: 2rem; }
+.payment__notice { margin: 0; padding: 1.6rem 2rem; border-radius: var(--r-xs); background: var(--c-sunken); color: var(--c-text); font-size: 2rem; font-weight: 600; line-height: 1.4; }
 .payment__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.6rem; }
 .pay-option {
   position: relative; display: grid; justify-items: center; align-content: end; gap: 0.6rem;
@@ -465,9 +451,9 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .pay-sheet__status { margin: 0 0 1.6rem; display: flex; align-items: center; gap: 1.6rem; font-weight: 600; font-size: 2.6rem; }
 .pay-sheet__status .spinner { width: 4rem; height: 4rem; border-width: 0.5rem; }
 
-/* =====================================================================
-   ORDER CONFIRMATION
-   ===================================================================== */
+
+
+
 .confirm { overflow-y: auto; }
 .confirm__inner { max-width: 96rem; margin: 0 auto; padding: 2rem 4rem 5rem; display: flex; flex-direction: column; align-items: center; gap: 1.6rem; min-height: 100%; }
 .confirm__logo { width: 30rem; margin-bottom: -3rem; }
@@ -504,9 +490,9 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .confirm__actions .btn { min-height: 9.8rem; font-weight: 800; font-size: 4rem; border-radius: var(--r-sm); }
 .confirm__actions .btn--outline-soft { background: #fff; border: 0.2rem solid var(--c-border); color: var(--c-text); }
 
-/* =====================================================================
-   REWARDS
-   ===================================================================== */
+
+
+
 .rewards__scroll { flex: 1; min-height: 0; }
 .rewards__content { max-width: 100rem; margin: 0 auto; padding: 2.6rem 4.2rem 4rem; display: grid; gap: 3rem; }
 .profile-card { padding: 3rem 3.4rem 3.4rem; border: 0.2rem solid var(--c-border); display: grid; gap: 2.4rem; }
@@ -542,66 +528,7 @@ html.is-narrow .menu__body { grid-template-columns: 15rem 1fr; }
 .idle__badge { width: 22rem; height: 22rem; }
 .idle__count { font-family: var(--f-display); font-size: 10rem; font-weight: 700; }
 
-/* =====================================================================
-   RESPONSIVE: narrower portrait (small tablets / phones)
-   ===================================================================== */
-html.is-narrow .menu__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-html.is-narrow .order-panel { margin: 1.2rem 3.8rem 0; }
-html.is-narrow .payment__grid { gap: 1.6rem; }
-html.is-narrow .cart__body,
-html.is-narrow .cart__footer { padding-left: 4rem; padding-right: 4rem; }
 
 
-/* =====================================================================
-   RESPONSIVE: landscape (desktop kiosks, tablets on their side)
-   1rem = 10px at 1920×1080
-   ===================================================================== */
-html.is-landscape .display--xl { font-size: 9.6rem; }
-html.is-landscape .display--lg,
-html.is-landscape .display--menu { font-size: 7.6rem; }
-/* Entry screens: brand column + card column */
-html.is-landscape .entry__inner { max-width: 170rem; }
-html.is-landscape .entry:not(:has(.welcome)) .entry__inner:has(.panel) {
-    display: grid; grid-template-columns: 1fr 1fr; column-gap: 8rem; row-gap: 1.6rem;
-    align-content: center; justify-items: center;
-  }
-html.is-landscape .entry__inner:has(.panel) > :not(.panel) { grid-column: 1; }
-html.is-landscape .entry__inner:has(.panel) > .panel { grid-column: 2; grid-row: 1 / span 6; align-self: center; margin-top: 0; max-width: 84rem; }
-html.is-landscape .entry--form .entry__inner { align-content: start !important; grid-template-columns: 0.75fr 1.25fr !important; column-gap: 5rem !important; }
-html.is-landscape .entry--form .entry__inner > .panel { max-width: 110rem; width: 100%; }
-html.is-landscape .auth-card--signup { grid-template-columns: 1fr 1fr; column-gap: 3rem; }
-html.is-landscape .auth-card--signup > :nth-child(n + 6) { grid-column: 1 / -1; }
-html.is-landscape .auth-card--signup > :nth-child(2) { grid-column: 2; }
-html.is-landscape .guest-card__art { width: 24rem; }
-html.is-landscape .welcome { padding-top: 2rem; }
-html.is-landscape .welcome__logo { width: 36rem; margin-bottom: -4rem; }
-html.is-landscape .welcome .display { margin-top: 3rem; }
-html.is-landscape .welcome__options { grid-template-columns: repeat(3, 1fr); width: min(150rem, 100%); padding-top: 3rem; }
-html.is-landscape .option-card { grid-template-columns: auto 1fr; }
-html.is-landscape .option-card__chev { display: none; }
-html.is-landscape .splash { grid-template-rows: 1fr auto auto; }
-html.is-landscape .splash__logo { width: 64rem; margin-bottom: -4rem; }
-html.is-landscape .splash__choices { width: min(110rem, 100%); }
-html.is-landscape .splash__choice { min-height: 22rem; }
-/* Cart: items left, payment & totals right */
-html.is-landscape .cart__body { display: grid; grid-template-columns: 1.1fr 1fr; column-gap: 5rem; align-content: start; padding: 1rem 6.4rem 2rem; }
-html.is-landscape .cart__body > .cart__items { grid-column: 1; grid-row: 1 / span 5; align-content: start; }
-html.is-landscape .cart__body > :not(.cart__items) { grid-column: 2; }
-html.is-landscape .cart__rule { display: none; }
-html.is-landscape .cart__footer { grid-template-columns: 1.1fr 1fr; column-gap: 5rem; padding: 1.6rem 6.4rem 3rem; }
-html.is-landscape .cart__footer .place-order { grid-column: 2; grid-row: 1; }
-html.is-landscape .cart__footer .cart__secondary { grid-column: 1; grid-row: 1; }
-html.is-landscape .empty-state--page { grid-column: 1 / -1; }
-html.is-landscape .confirm__inner { max-width: 120rem; display: grid; grid-template-columns: 1fr 1fr; column-gap: 6rem; align-content: center; justify-items: center; }
-html.is-landscape .confirm__inner > :not(.receipt):not(.confirm__actions) { grid-column: 1; }
-html.is-landscape .confirm__inner > .receipt { grid-column: 2; grid-row: 1 / span 4; align-self: center; }
-html.is-landscape .confirm__inner > .confirm__actions { grid-column: 2; padding-top: 2rem; }
-html.is-landscape .rewards__content { max-width: 150rem; }
-html.is-landscape .reward-grid { grid-template-columns: repeat(5, 1fr); }
-html.is-landscape .rewards__content > .profile-card { grid-column: 1 / -1; }
-html.is-landscape .rewards__content > .loading-block,
-html.is-landscape .rewards__content > .empty-state { grid-column: 1 / -1; }
-html.is-landscape .osk__key { min-height: 7rem; }
-html.is-landscape body.osk-open .screen { padding-bottom: 40rem; }
 
 .menu__note { padding: 2rem 4rem 3rem; flex: none; }

@@ -2,12 +2,12 @@
   "name": "isla-kiosk",
   "version": "1.0.0",
   "private": true,
-  "description": "Isla Argao self-order kiosk — touch-first PWA built from the Figma design. Zero runtime dependencies.",
+  "description": "Isla Argao self-order kiosk — touch-first PWA with a local SQLite database.",
   "scripts": {
     "start": "node server.js",
-    "start:lan": "HOST=0.0.0.0 node server.js",
+    "start:lan": "node tools/start-lan.mjs",
     "precache": "node tools/gen-precache.mjs"
   },
-  "engines": { "node": ">=18" },
+  "engines": { "node": ">=22.5" },
   "license": "UNLICENSED"
 }
