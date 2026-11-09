@@ -1,0 +1,16 @@
+{
+  "name": "Isla Argao Kiosk",
+  "short_name": "Isla Kiosk",
+  "description": "Self-order kiosk for Isla Argao café.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#f7f2ea",
+  "theme_color": "#4b3423",
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

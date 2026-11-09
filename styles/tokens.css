@@ -1,0 +1,48 @@
+/* Design tokens extracted from "Isla Kiosk - FINAL.fig".
+   Sizing system: the design is a 1080×1920 portrait kiosk. 1rem == 10 design px
+   at that size, and the root font-size scales with the viewport (see base.css),
+   so every rem value below maps 1:1 to a Figma measurement ÷ 10. */
+:root {
+  /* Colour — "Kape Bai / Color" variables + most-used fills */
+  --c-bg: #f7f2ea;          /* surface / page */
+  --c-surface: #ffffff;     /* cards, panels */
+  --c-sunken: #f5eadb;      /* pressed chips, image wells */
+  --c-sunken-2: #f1e3cf;    /* qty badges */
+  --c-brand: #4b3423;       /* kape brown: primary buttons, headings */
+  --c-text: #725443;        /* body text */
+  --c-text-strong: #4b3423;
+  --c-muted: #827e7e;       /* placeholders */
+  --c-border: #beb19f;      /* outlines */
+  --c-divider: #e6d6c1;
+  --c-guest: #beb19f;       /* "Continue as Guest" fill */
+  --c-success: #2f5d46;
+  --c-success-bg: #dceadf;
+  --c-error: #b3261e;
+  --c-error-bg: #fbe9e7;
+  --c-on-brand: #f7f2ea;
+  --c-scrim: rgba(46, 27, 18, 0.55);
+
+  /* Type */
+  --f-display: "Playfair", "Playfair Display", Georgia, "Times New Roman", serif;
+  --f-ui: "Montserrat", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --tracking: 0.05em;       /* design uses 5% letter-spacing on UI text */
+
+  /* Shape */
+  --r-pill: 999px;
+  --r-xl: 4rem;
+  --r-lg: 3rem;
+  --r-md: 2.5rem;
+  --r-sm: 2rem;
+  --r-xs: 1.2rem;
+
+  /* Elevation */
+  --shadow-card: 0 0.6rem 2rem rgba(75, 52, 35, 0.08);
+  --shadow-modal: 0 2rem 6rem rgba(46, 27, 18, 0.3);
+
+  /* Touch: never smaller than ~48 CSS px on any device */
+  --touch-min: max(48px, 6.4rem);
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 280ms;
+}

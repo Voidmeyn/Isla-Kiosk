@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- Kiosk: no pinch-zoom, cover the notch area on tablets -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#4b3423" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Isla Kiosk" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Isla Kiosk</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" href="assets/img/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/img/icon-192.png" />
+
+  <!-- Fonts from the design: Playfair (display) + Montserrat (UI).
+       For fully offline kiosks, self-host these (see README → "Offline fonts"). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair:ital,opsz,wght@0,5..1200,500;0,5..1200,600;0,5..1200,700;0,5..1200,800;1,5..1200,500&display=swap" />
+
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/screens.css" />
+  <link rel="preload" as="image" href="assets/img/bg-palms.jpg" />
+</head>
+<body>
+  <noscript>This kiosk needs JavaScript enabled.</noscript>
+  <!-- The kiosk "stage": a fixed kiosk-sized canvas scaled to fit the screen (see src/core/viewport.js) -->
+  <div id="stage">
+    <main id="app" aria-live="polite"></main>
+    <div id="overlay-root"></div>
+    <div id="keyboard-root"></div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

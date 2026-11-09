@@ -1,0 +1,253 @@
+/* ================= Buttons ================= */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 1.6rem;
+  min-height: var(--touch-min);
+  padding: 0 3.2rem;
+  border-radius: var(--r-lg);
+  border: 0.3rem solid transparent;
+  font-family: var(--f-ui); font-weight: 600; font-size: 3.5rem; letter-spacing: var(--tracking);
+  cursor: pointer; text-decoration: none;
+  transition: transform 120ms ease, filter 120ms ease, background-color 160ms ease, opacity 160ms;
+}
+.btn:active:not(:disabled) { transform: scale(0.97); filter: brightness(0.94); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+.btn:focus-visible, .chip:focus-visible, .icon-btn:focus-visible, .field__control:focus-visible {
+  outline: 0.4rem solid #c79a6a; outline-offset: 0.3rem;
+}
+.btn--lg     { min-height: 12.3rem; font-size: 3.6rem; }
+.btn--md     { min-height: 9.8rem;  font-size: 3.2rem; border-radius: var(--r-sm); }
+.btn--sm     { min-height: 7.6rem;  font-size: 2.6rem; border-radius: var(--r-sm); }
+.btn--block  { width: 100%; }
+.btn--primary   { background: var(--c-brand); color: #fff; }
+.btn--outline   { background: var(--c-surface); color: var(--c-text-strong); border-color: var(--c-brand); }
+.btn--outline-soft { background: var(--c-bg); color: var(--c-text); border: 0.15rem solid var(--c-border); }
+.btn--guest     { background: var(--c-guest); color: #1d1208; }
+.btn--light     { background: var(--c-bg); color: var(--c-text-strong); border: 0.5rem solid var(--c-brand); }
+.btn__icon { width: 1.25em; height: 1.25em; flex: none; }
+.btn .spinner { width: 1.1em; height: 1.1em; border-width: 0.35rem; border-color: currentColor; border-right-color: transparent; }
+
+.icon-btn {
+  display: inline-grid; place-items: center;
+  min-width: var(--touch-min); min-height: var(--touch-min);
+  border: 0; background: transparent; color: var(--c-text-strong);
+  border-radius: 50%; cursor: pointer;
+}
+.icon-btn:active { background: rgba(75, 52, 35, 0.08); }
+.icon-btn svg { width: 4rem; height: 4rem; }
+
+/* "← Back" pill (149×57 in design, enlarged for touch) */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 1rem;
+  min-height: var(--touch-min); padding: 0 2.6rem 0 1.8rem;
+  border-radius: var(--r-md); border: 0.1rem solid var(--c-border); background: var(--c-bg);
+  font-weight: 600; font-size: 2.6rem; color: var(--c-text); cursor: pointer;
+}
+.back-btn svg { width: 3.6rem; height: 3.6rem; color: var(--c-border); }
+.back-btn:active { background: var(--c-sunken); }
+
+/* "Dine In" brown pill */
+.order-type {
+  display: inline-flex; align-items: center; gap: 1rem;
+  min-height: 5.8rem; padding: 0 3.4rem;
+  border-radius: var(--r-md); border: 0.1rem solid var(--c-border);
+  background: var(--c-brand); color: var(--c-on-brand);
+  font-weight: 600; font-size: 2.6rem; cursor: pointer;
+}
+.order-type svg { width: 3rem; height: 3rem; }
+
+/* User chip ("👤 Ashly") */
+.user-chip {
+  display: inline-flex; align-items: center; gap: 1.2rem;
+  min-height: 5.8rem; padding: 0 2.6rem 0 1.6rem;
+  border-radius: var(--r-md); border: 0.1rem solid var(--c-border); background: var(--c-bg);
+  font-weight: 600; font-size: 2.6rem; color: var(--c-text); cursor: pointer;
+}
+.user-chip svg { width: 4rem; height: 4rem; color: var(--c-text-strong); }
+
+/* ================= Form fields ================= */
+.field { display: flex; flex-direction: column; gap: 1rem; }
+.field__label { font-weight: 600; font-size: 2.6rem; color: var(--c-text); text-transform: none; }
+.field__label--caps { text-transform: uppercase; }
+.field__wrap { position: relative; }
+.field__control {
+  width: 100%; min-height: 9.9rem; padding: 0 3.2rem;
+  border-radius: var(--r-md); border: 0.1rem solid var(--c-border); background: var(--c-bg);
+  font-family: var(--f-ui); font-size: 3.5rem; font-weight: 500; letter-spacing: var(--tracking); color: var(--c-text-strong);
+  outline: none; cursor: pointer; text-align: left;
+  display: flex; align-items: center;
+}
+.field__wrap:has(.field__adorn) .field__control { padding-right: 9rem; }
+.field__control > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.field__control--compact { min-height: 8rem; font-size: 3rem; }
+.field__control::placeholder, .field__placeholder { color: var(--c-muted); font-weight: 300; }
+.field__control[aria-invalid="true"] { border-color: var(--c-error); background: var(--c-error-bg); }
+.field__control.is-active { border-color: var(--c-brand); box-shadow: 0 0 0 0.3rem rgba(75, 52, 35, 0.15); }
+.field__adorn { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); }
+.field__adorn svg { width: 4.6rem; height: 4.6rem; color: var(--c-text-strong); }
+.field__error { color: var(--c-error); font-size: 2.2rem; font-weight: 600; min-height: 0; }
+.field__pin-dots { letter-spacing: 0.4em; font-weight: 800; }
+
+.form-error {
+  display: flex; gap: 1.2rem; align-items: center;
+  padding: 1.8rem 2.4rem; border-radius: var(--r-xs);
+  background: var(--c-error-bg); color: var(--c-error); font-weight: 600; font-size: 2.4rem;
+}
+.form-error svg { width: 3.2rem; height: 3.2rem; flex: none; }
+
+/* Checkbox (Material-style from the design's Checkboxes component) */
+.check {
+  display: inline-flex; align-items: center; gap: 1.6rem; cursor: pointer;
+  min-height: var(--touch-min); font-weight: 600; font-size: 2.6rem; color: var(--c-text);
+}
+.check input { position: absolute; opacity: 0; pointer-events: none; }
+.check__box {
+  width: 3.4rem; height: 3.4rem; flex: none; border-radius: 0.5rem;
+  border: 0.3rem solid var(--c-text); display: grid; place-items: center; background: var(--c-surface);
+  transition: background 120ms;
+}
+.check__box svg { width: 2.8rem; height: 2.8rem; color: #fff; opacity: 0; }
+.check input:checked + .check__box { background: var(--c-brand); border-color: var(--c-brand); }
+.check input:checked + .check__box svg { opacity: 1; }
+.check input:focus-visible + .check__box { outline: 0.4rem solid #c79a6a; outline-offset: 0.2rem; }
+.check--invalid .check__box { border-color: var(--c-error); }
+
+.link-btn {
+  background: none; border: 0; padding: 0.8rem 0.4rem; min-height: var(--touch-min);
+  font-weight: 600; font-size: 2.6rem; color: var(--c-text); text-decoration: underline; cursor: pointer;
+}
+
+.divider-or { display: flex; align-items: center; gap: 2rem; color: var(--c-text); font-weight: 600; font-size: 2.6rem; }
+.divider-or::before, .divider-or::after { content: ""; flex: 1; height: 0.15rem; background: var(--c-border); }
+
+/* ================= Chips (categories) ================= */
+.chips { display: flex; gap: 0.9rem; overflow-x: auto; padding: 0.4rem 0.2rem 1rem; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 1 0 auto; min-height: 6rem; padding: 0 1.5rem;
+  border-radius: var(--r-md); border: 0.15rem solid var(--c-border); background: var(--c-bg);
+  font-weight: 600; font-size: 2.2rem; color: var(--c-text); cursor: pointer; white-space: nowrap;
+  transition: background 160ms, color 160ms;
+}
+.chip:active { background: var(--c-sunken); }
+.chip[aria-pressed="true"] { background: var(--c-brand); color: #fff; border-color: var(--c-brand); }
+
+/* ================= Stepper (– 1 +) ================= */
+.stepper {
+  display: inline-flex; align-items: center;
+  border: 0.15rem solid var(--c-border); border-radius: var(--r-md); background: var(--c-bg);
+}
+.stepper button {
+  width: 6.4rem; height: 6.4rem; border: 0; background: transparent; border-radius: 50%;
+  font-size: 3.2rem; font-weight: 600; color: var(--c-text); cursor: pointer; display: grid; place-items: center;
+}
+.stepper button:active:not(:disabled) { background: var(--c-sunken); }
+.stepper button:disabled { opacity: 0.35; }
+.stepper button svg { width: 2.8rem; height: 2.8rem; }
+.stepper output { min-width: 4.4rem; text-align: center; font-weight: 800; font-size: 2.6rem; color: var(--c-text-strong); }
+
+/* ================= Overlays: modal, dialog, popover ================= */
+.overlay {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center; padding: 4rem;
+  background: var(--c-scrim);
+  animation: fade-in 200ms ease both;
+}
+.overlay.is-closing { animation: fade-out 160ms ease both; }
+.overlay--top { place-items: start end; padding: 12rem 4rem; background: rgba(46, 27, 18, 0.25); }
+.modal {
+  position: relative; width: min(95.2rem, 100%); max-height: 100%;
+  display: flex; flex-direction: column;
+  background: var(--c-surface); border-radius: var(--r-xl); box-shadow: var(--shadow-modal);
+  animation: pop-in 260ms var(--ease) both; overflow: hidden;
+}
+.modal__close { position: absolute; top: 2rem; right: 2rem; z-index: 2; }
+.modal__body { padding: 6rem 6rem 6rem; overflow-y: auto; }
+
+/* Status dialog (Account created / Added to order / Reward redeemed …) */
+.status { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.6rem; }
+.status__badge {
+  width: 30rem; height: 30rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c-sunken); border: 0.2rem solid var(--c-border); color: var(--c-text-strong);
+  margin-bottom: 1.6rem;
+}
+.status__badge svg { width: 17rem; height: 17rem; }
+.status__badge--error { background: var(--c-error-bg); color: var(--c-error); border-color: #e7b7b2; }
+.status__title { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 8rem; line-height: 1.05; color: var(--c-text-strong); letter-spacing: 0; }
+.status__text  { margin: 0 0 4rem; font-weight: 600; font-size: 2.6rem; color: var(--c-text); max-width: 64rem; }
+.status .btn { width: min(68rem, 100%); }
+.status__timer { display: block; width: min(68rem, 100%); height: 0.6rem; margin-top: 2.4rem; border-radius: 1rem; background: var(--c-brand); transform-origin: left; animation: timer-shrink linear forwards; opacity: 0.35; }
+@keyframes timer-shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+/* Popover (user chip menu: Exit / Log out) */
+.popover {
+  width: min(52rem, 90vw); padding: 4rem; display: flex; flex-direction: column; gap: 3rem; align-items: stretch;
+  background: var(--c-surface); border-radius: var(--r-xl); box-shadow: var(--shadow-modal);
+  animation: pop-in 220ms var(--ease) both; position: relative;
+}
+.popover__who { display: flex; align-items: center; gap: 2.4rem; justify-content: center; }
+.popover__avatar {
+  width: 14rem; height: 14rem; border-radius: 50%; background: var(--c-sunken); border: 0.2rem solid var(--c-border);
+  display: grid; place-items: center; color: var(--c-text-strong); flex: none;
+}
+.popover__avatar svg { width: 8rem; height: 8rem; }
+.popover__name { font-family: var(--f-display); font-weight: 700; font-size: 8rem; color: var(--c-text-strong); letter-spacing: 0; }
+
+/* ================= Spinner / loading ================= */
+.spinner {
+  width: 8rem; height: 8rem; border-radius: 50%;
+  border: 0.8rem solid var(--c-sunken); border-top-color: var(--c-brand);
+  animation: spin 0.9s linear infinite; display: inline-block;
+}
+.loading-block { display: grid; place-items: center; gap: 2.4rem; padding: 8rem 2rem; color: var(--c-text); font-weight: 600; font-size: 2.6rem; text-align: center; }
+
+/* Toast */
+.toast-root { position: fixed; left: 50%; bottom: 6rem; transform: translateX(-50%); z-index: 80; display: grid; gap: 1.2rem; pointer-events: none; }
+.toast {
+  padding: 2.2rem 3.6rem; border-radius: var(--r-pill); background: var(--c-brand); color: #fff;
+  font-weight: 600; font-size: 2.6rem; box-shadow: var(--shadow-modal); animation: pop-in 200ms var(--ease) both;
+}
+.toast--error { background: var(--c-error); }
+
+/* ================= Numeric keypad modal (design: "input number modal") ================= */
+.keypad { padding: 4.4rem 4.4rem 4rem; display: flex; flex-direction: column; gap: 2.4rem; }
+.keypad__label { font-weight: 600; font-size: 2.6rem; color: var(--c-text); }
+.keypad__display {
+  min-height: 10rem; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-md); border: 0.15rem solid var(--c-border); background: var(--c-bg);
+  font-size: 5.2rem; font-weight: 700; color: var(--c-text-strong); letter-spacing: 0.15em;
+}
+.keypad__display.is-empty { color: var(--c-muted); font-weight: 300; font-size: 3.4rem; letter-spacing: var(--tracking); }
+.keypad__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
+.keypad__key {
+  min-height: 9.6rem; border-radius: var(--r-md); border: 0.15rem solid var(--c-border); background: #fff;
+  font-size: 4.4rem; font-weight: 500; color: var(--c-text-strong); cursor: pointer; display: grid; place-items: center;
+}
+.keypad__key:active { background: var(--c-sunken); transform: scale(0.98); }
+.keypad__key--alt { background: var(--c-sunken); font-size: 2.8rem; font-weight: 600; }
+.keypad__key svg { width: 4.4rem; height: 4.4rem; }
+.keypad__actions { display: grid; grid-template-columns: 1fr 2fr; gap: 1.8rem; }
+
+/* ================= On-screen text keyboard ================= */
+.osk {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+  background: #efe6d8; border-top: 0.2rem solid var(--c-border);
+  padding: 2rem 2rem calc(2rem + env(safe-area-inset-bottom));
+  box-shadow: 0 -1rem 4rem rgba(46, 27, 18, 0.18);
+  animation: slide-up 220ms var(--ease) both;
+}
+.osk__inner { max-width: 120rem; margin: 0 auto; display: grid; gap: 1.2rem; }
+.osk__preview { display: flex; align-items: center; gap: 2rem; padding: 0 0.6rem 0.8rem; font-size: 2.6rem; font-weight: 600; }
+.osk__preview span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--c-text-strong); }
+.osk__row { display: flex; gap: 1rem; justify-content: center; }
+.osk__key {
+  flex: 1 1 0; max-width: 10rem; min-height: 8.6rem; border-radius: 1.4rem; border: 0;
+  background: #fff; box-shadow: 0 0.3rem 0 rgba(75, 52, 35, 0.18);
+  font-size: 3.4rem; font-weight: 600; color: var(--c-text-strong); cursor: pointer; display: grid; place-items: center;
+}
+.osk__key:active { background: var(--c-sunken); transform: translateY(0.2rem); box-shadow: none; }
+.osk__key--wide { max-width: 16rem; flex-grow: 1.6; font-size: 2.4rem; }
+.osk__key--space { max-width: none; flex-grow: 6; }
+.osk__key--done { background: var(--c-brand); color: #fff; max-width: 20rem; flex-grow: 2; font-size: 2.6rem; }
+.osk__key.is-on { background: var(--c-brand); color: #fff; }
+.osk__key svg { width: 4rem; height: 4rem; }
+body.osk-open .screen { padding-bottom: 46rem; }

@@ -1,0 +1,139 @@
+/* ---------- Responsive scale ----------
+   The root font-size is set by src/core/viewport.js:
+   - kiosk views (portrait 1080×1920 / landscape 1920×1080): 1rem = 10px on a fixed canvas,
+     and the whole canvas is CSS-scaled to fit the window (letterboxed on laptops);
+   - "fit screen" view: 1rem scales with the window (portrait ref 1080×1920, landscape ref 1920×1080).
+   Layout variants hang off classes on <html>: .is-portrait / .is-landscape / .is-narrow. */
+html { font-size: 10px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--f-ui);
+  letter-spacing: var(--tracking);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Kiosk hardening ---------- */
+body {
+  overflow: hidden;
+  overscroll-behavior: none;          /* no pull-to-refresh / rubber band */
+  -webkit-user-select: none;
+  user-select: none;                  /* no accidental text selection */
+  -webkit-touch-callout: none;        /* no iOS long-press callouts */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;         /* no double-tap zoom */
+}
+input, textarea { -webkit-user-select: text; user-select: text; }
+img { -webkit-user-drag: none; user-select: none; max-width: 100%; display: block; }
+button { font: inherit; color: inherit; letter-spacing: inherit; }
+
+/* ---------- App shell & screen transitions ---------- */
+/* Stage: a transformed box, so every position:fixed child (screens, overlays,
+   on-screen keyboard, toasts) is positioned inside the kiosk canvas. */
+#stage {
+  position: fixed;
+  left: 0; top: 0;
+  width: var(--stage-w, 100vw);
+  height: var(--stage-h, 100vh);
+  transform-origin: 0 0;
+  transform: translate(var(--stage-x, 0), var(--stage-y, 0)) scale(var(--stage-s, 1));
+  overflow: hidden;
+  background: var(--c-bg);
+}
+html.view-kiosk body {
+  background: radial-gradient(ellipse at 50% 30%, #3a2a1f 0%, #1c130d 70%);
+}
+html.view-kiosk.is-letterboxed #stage {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 30px 120px rgba(0, 0, 0, 0.55);
+}
+#app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+html.view-fill #app {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Preview switcher (laptop testing). Lives outside the stage, unscaled. */
+#preview-bar {
+  position: fixed; left: 50%; top: 10px; transform: translateX(-50%); z-index: 1000;
+  display: flex; flex-direction: column; align-items: center;
+  font: 600 12px/1.2 var(--f-ui); letter-spacing: 0.02em; color: #f7f2ea;
+  -webkit-user-select: none; user-select: none;
+}
+.pv-toggle {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
+  border: 1px solid rgba(247, 242, 234, 0.25); background: rgba(28, 19, 13, 0.82); color: inherit;
+  font: inherit; cursor: pointer; backdrop-filter: blur(6px);
+}
+html.view-fill .pv-toggle, html.view-kiosk:not(.is-letterboxed) .pv-toggle { opacity: 0.35; padding: 4px 10px; }
+html.view-kiosk.is-portrait.is-letterboxed #preview-bar { left: 12px; transform: none; align-items: flex-start; }
+#preview-bar .pv-toggle:hover, #preview-bar.is-open .pv-toggle { opacity: 1; }
+.pv-dot { width: 8px; height: 8px; border-radius: 50%; background: #c79a6a; }
+.pv-menu {
+  margin-top: 8px; width: 220px; padding: 8px; border-radius: 14px; display: grid; gap: 4px;
+  background: rgba(28, 19, 13, 0.94); border: 1px solid rgba(247, 242, 234, 0.18); box-shadow: 0 12px 40px rgba(0,0,0,.4);
+}
+.pv-option {
+  display: grid; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 0;
+  background: transparent; color: inherit; font: inherit; cursor: pointer;
+}
+.pv-option small { font-weight: 500; opacity: 0.65; }
+.pv-option:hover { background: rgba(247, 242, 234, 0.08); }
+.pv-option[aria-pressed="true"] { background: #f7f2ea; color: #2e1b12; }
+.pv-hint { margin: 6px 12px 4px; font-weight: 500; font-size: 11px; opacity: 0.55; }
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+.screen--enter-forward  { animation: screen-in-fwd var(--dur) var(--ease) both; }
+.screen--leave-forward  { animation: screen-out-fwd var(--dur) var(--ease) both; }
+.screen--enter-back     { animation: screen-in-back var(--dur) var(--ease) both; }
+.screen--leave-back     { animation: screen-out-back var(--dur) var(--ease) both; }
+.screen--enter-fade     { animation: fade-in calc(var(--dur) * 1.4) ease both; }
+.screen--leave-fade     { animation: fade-out var(--dur) ease both; }
+
+@keyframes screen-in-fwd   { from { transform: translateX(6%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes screen-out-fwd  { from { opacity: 1; } to { transform: translateX(-4%); opacity: 0; } }
+@keyframes screen-in-back  { from { transform: translateX(-6%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes screen-out-back { from { opacity: 1; } to { transform: translateX(4%); opacity: 0; } }
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes pop-in   { from { opacity: 0; transform: translateY(2rem) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes slide-up { from { transform: translateY(100%); } to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+
+/* Palm background used on entry screens */
+.bg-palms {
+  background: var(--c-bg) url("../assets/img/bg-palms.jpg") center / cover no-repeat;
+}
+
+/* Scroll containers: momentum scroll, hidden scrollbars on touch */
+.scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-border) transparent;
+}
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
